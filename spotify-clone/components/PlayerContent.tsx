@@ -26,52 +26,43 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   const onPlayNext = () => {
     if (player.ids.length === 0) return;
-
     const currentIndex = player.ids.findIndex((id) => id === player.activeId);
     const nextSong = player.ids[currentIndex + 1];
-
     player.setId(nextSong || player.ids[0]);
   };
 
   const onPlayPrevious = () => {
     if (player.ids.length === 0) return;
-
     const currentIndex = player.ids.findIndex((id) => id === player.activeId);
     const previousSong = player.ids[currentIndex - 1];
-
     player.setId(previousSong || player.ids[player.ids.length - 1]);
   };
 
   const [play, { pause, sound }] = useSound(songUrl, {
     volume,
-    onplay: () => setIsPlaying(true),
+    onload: () => console.log("🔈 Sound loaded"),
+    onplay: () => {
+      console.log("▶️ Playing");
+      setIsPlaying(true);
+    },
     onend: () => {
+      console.log("⏹ Ended");
       setIsPlaying(false);
       onPlayNext();
     },
-    onpause: () => setIsPlaying(false),
+    onpause: () => {
+      console.log("⏸ Paused");
+      setIsPlaying(false);
+    },
     format: ['mp3'],
   });
 
-  useEffect(() => {
-    if (sound) {
-      sound.play();
-    }
-
-    return () => {
-      sound?.unload();
-    };
-  }, [sound]);
-
-  useEffect(() => {
-    console.log("🎧 Song URL:", songUrl);
-  }, [songUrl]);
-
   const handlePlay = () => {
-    console.log("🔘 Bấm nút Play/Pause");
     if (!isPlaying) {
+      console.log("🟢 Play clicked");
       play();
     } else {
+      console.log("🔴 Pause clicked");
       pause();
     }
   };
@@ -82,7 +73,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      {/* Left: Media info and like */}
+      {/* Media info + Like */}
       <div className="flex w-full justify-start">
         <div className="flex items-center gap-x-4">
           <MediaItem data={song} />
