@@ -50,7 +50,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       onPlayNext();
     },
     onpause: () => setIsPlaying(false),
-    format: ['mp3']
+    format: ['mp3'],
   });
 
   useEffect(() => {
@@ -64,10 +64,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   }, [sound]);
 
   useEffect(() => {
-    console.log("🎵 Loaded song URL:", songUrl);
+    console.log("🎧 Song URL:", songUrl);
   }, [songUrl]);
 
   const handlePlay = () => {
+    console.log("🔘 Bấm nút Play/Pause");
     if (!isPlaying) {
       play();
     } else {
@@ -81,7 +82,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      {/* Left: Media Info + Like */}
+      {/* Left: Media info and like */}
       <div className="flex w-full justify-start">
         <div className="flex items-center gap-x-4">
           <MediaItem data={song} />
@@ -119,7 +120,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         />
       </div>
 
-      {/* Volume */}
+      {/* Volume Control */}
       <div className="hidden md:flex w-full justify-end pr-2">
         <div className="flex items-center gap-x-2 w-[120px]">
           <VolumeIcon
@@ -127,7 +128,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             className="cursor-pointer"
             size={34}
           />
-          <Slider value={volume} onChange={(value) => setVolume(value)} />
+          <Slider
+            value={volume}
+            onChange={(value) => setVolume(value)}
+          />
         </div>
       </div>
     </div>
